@@ -1,3 +1,30 @@
+<?php
+// Handle form submission
+$errors = [];
+$success = '';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+    $message = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_STRING);
+
+    if (empty($name)) {
+        $errors[] = "Name is required.";
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Valid email is required.";
+    }
+    if (empty($message)) {
+        $errors[] = "Message is required.";
+    }
+
+    if (empty($errors)) {
+        // In a real application, send email or save to database
+        $success = "Thank you, $name! Your message has been sent.";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -372,26 +399,31 @@
         .project-card img {
             width: 100%;
             height: 240px;
-            object-fit: cover;
-            transition: transform 0.4s ease;
+            object-fit: contain;
+            background: #f8f9fa;
+            display: block;
+            padding: 24px 0;
+            box-sizing: border-box;
+            transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); /* Add smooth zoom transition */
         }
 
         .project-card:hover img {
-            transform: scale(1.1);
+            transform: scale(1.08); /* Zoom in on hover */
         }
 
         .project-card .content {
             padding: 20px;
             position: relative;
-            transform: translateY(30px);
-            opacity: 0;
-            transition: all 0.4s ease;
+            /* Remove transform and opacity for always visible */
+            transform: none;
+            opacity: 1;
+            transition: none;
             background: linear-gradient(transparent, rgba(0, 123, 255, 0.1));
         }
 
+        /* Remove the hover effect for .project-card .content */
         .project-card:hover .content {
-            transform: translateY(0);
-            opacity: 1;
+            /* No effect */
         }
 
         .project-card h3 {
@@ -796,7 +828,7 @@
     <section id="home" class="hero">
         <canvas id="particle-bg"></canvas>
         <h1>Delvin Varghese</h1>
-        <p>UI/UX Designer & Developer Crafting Innovative Digital Experiences</p>
+        <p>Web Developer</p>
         <a href="#projects" class="cta-button" data-tilt data-tilt-max="10">Explore My Work</a>
     </section>
 
@@ -804,7 +836,7 @@
     <section id="about" class="about">
         <div class="card">
             <h2>About Me</h2>
-            <p>I'm a passionate UI/UX designer and web developer with over 5 years of experience creating user-centric digital solutions. My expertise lies in crafting intuitive interfaces and seamless experiences that drive engagement.</p>
+            <p>I'm a 3rd-year student passionate about web development and creating user-friendly designs.</p>
             <div class="skills">
                 <div class="skill-bar">
                     <span>UI/UX Design</span>
@@ -825,13 +857,13 @@
                     </div>
                 </div>
                 <div class="skill-bar">
-                    <span>Branding</span>
+                    <span>Graphic Design</span>
                     <div class="progress">
                         <div style="width: 75%;" data-animate-width="75%"></div>
                     </div>
                 </div>
             </div>
-            <a href="#" class="cv-button" data-tilt data-tilt-max="10">Download CV</a>
+            <a href="https://drive.google.com/file/d/16nK2l_1USFl8nguOX2V81gQxUVwP4S0m/view?usp=sharing" class="cv-button" data-tilt data-tilt-max="10" target="_main">Download CV</a>
         </div>
     </section>
 
@@ -860,34 +892,30 @@
     <!-- Projects Section -->
     <section id="projects" class="projects">
         <h2>My Projects</h2>
-        <div class="filter-bar">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="uiux">UI/UX</button>
-            <button class="filter-btn" data-filter="webdev">Web Dev</button>
-        </div>
+
         <div class="project-grid">
             <div class="project-card" data-category="uiux" data-tilt data-tilt-max="8">
-                <img src="https://www.figma.com/community/resource/199bf294-77ea-42af-87f7-8b3a87af8937/thumbnail" alt="Project 1">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/92/LaTeX_logo.svg" alt="LaTeX Project">
                 <div class="content">
-                    <h3>UI/UX Project</h3>
-                    <p>A user-centric design for a mobile app with seamless interactions.</p>
-                    <a href="#" class="view-btn">View Project</a>
+                    <h3>LaTex Project</h3>
+                    <p>Crafting professional books with LaTeX for academic and creative projects.</p>
+                    <a href="https://drive.google.com/file/d/1ZhkTGW5SnR7V0VL5d0oFpbBPEHU4huua/view?usp=sharing" class="view-btn" target="_main">View Project</a>
                 </div>
             </div>
             <div class="project-card" data-category="webdev" data-tilt data-tilt-max="8">
-                <img src="https://coding-boot-camp.github.io/full-stack/static/71297da067a2919b4e96ef0b7cfc7ba5/c1b63/01-team-collab.png" alt="Project 2">
+                <img src="https://thumbs.dreamstime.com/b/snake-ladder-board-game-illustration-140335895.jpg" alt="Snake and Ladder Game" style="width: 80%; margin: auto; padding-top: 20px; display: block;">
                 <div class="content">
-                    <h3>Web Development</h3>
-                    <p>A responsive e-commerce platform with modern UI.</p>
-                    <a href="#" class="view-btn">View Project</a>
+                    <h3>C Project</h3>
+                    <p>Built using C programming - Snake & Ladder Game.</p>
+                    <a href="https://drive.google.com/file/d/1Y1b4n-bl4jhxXKlDErOw1DnPKuzqeSbo/view?usp=sharing" class="view-btn" target="_main">View Project</a>
                 </div>
             </div>
             <div class="project-card" data-category="uiux" data-tilt data-tilt-max="8">
-                <img src="https://blog.thenounproject.com/wp-content/uploads/2023/04/figma-design-systems.png">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Linux Logo">
                 <div class="content">
-                    <h3>Design System</h3>
-                    <p>Scalable UI components for enterprise applications.</p>
-                    <a href="#" class="view-btn">View Project</a>
+                    <h3>Linux Commands Site</h3>
+                    <p>A comprehensive guide to Linux commands with interactive website.</p>
+                    <a href="https://delvin100.github.io/linux-assignment/" class="view-btn" target="_main">View Project</a>
                 </div>
             </div>
             <div class="project-card" data-category="webdev" data-tilt data-tilt-max="8">
@@ -895,23 +923,23 @@
                 <div class="content">
                     <h3>Portfolio Site</h3>
                     <p>A modern, animated portfolio showcasing creativity.</p>
-                    <a href="#" allergic class="view-btn">View Project</a>
+                    <a href="https://delvin100.github.io/Portfolio/" allergic class="view-btn" target="_main">View Project</a>
                 </div>
             </div>
             <div class="project-card" data-category="uiux" data-tilt data-tilt-max="8">
-                <img src="https://uizard.io/static/2b12b4964dcde0c9a5e164698bd77f79/a8e47/114e4f2e9bc8c445213e504231ffb79ca627d84f-1440x835.png" alt="Project 5">
+                <a href="https://ibb.co/BVpd4p5r"><img src="https://i.ibb.co/mCj1vjVX/Screenshot-2025-08-31-193530.png" alt="Screenshot-2025-08-31-193530" border="0"></a>
                 <div class="content">
-                    <h3>Mobile App Design</h3>
-                    <p>An intuitive mobile app UI for enhanced user engagement.</p>
-                    <a href="#" class="view-btn">View Project</a>
+                    <h3>METFLIX</h3>
+                    <p>Discover movies effortlessly with this interactive movie explorer site.</p>
+                    <a href="https://movie-explorer-95ea.onrender.com/" class="view-btn" target="_main">View Project</a>
                 </div>
             </div>
             <div class="project-card" data-category="webdev" data-tilt data-tilt-max="8">
-                <img src="https://s.tmimgcdn.com/scr/1200x750/221000/doshtan-project-management-admin-dashboard-bootstrap-5-template_221060-original.png">
+                <a href="https://ibb.co/JjLfJC08"><img src="https://i.ibb.co/xqvpT3Pw/Screenshot.png" alt="Screenshot" border="0"></a>
                 <div class="content">
-                    <h3>Admin Dashboard</h3>
-                    <p>A sleek dashboard for efficient data management.</p>
-                    <a href="#" class="view-btn">View Project</a>
+                    <h3>Word Puzzle Game</h3>
+                    <p>Challenge your vocabulary with this interactive word puzzle game.</p>
+                    <a href="https://delvin100.github.io/Word_Guessing_Game/" class="view-btn" target="_main">View Project</a>
                 </div>
             </div>
         </div>
@@ -921,6 +949,16 @@
     <section id="contact" class="contact">
         <h2>Contact Me</h2>
         <div class="card">
+            <?php if (!empty($success)): ?>
+                <p class="success"><?php echo htmlspecialchars($success); ?></p>
+            <?php endif; ?>
+            <?php if (!empty($errors)): ?>
+                <div class="error">
+                    <?php foreach ($errors as $error): ?>
+                        <p><?php echo htmlspecialchars($error); ?></p>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
             <form method="POST" action="">
                 <div class="form-group">
                     <input type="text" name="name" id="name" placeholder=" " required>
